@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "_ConfigurePlugin";
+}
+
+@model ConfigurationModel
+@using Nop.Plugin.Payments.Bambora.Models;
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+<form asp-controller="PaymentBambora" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                <p>
+                    <b>If you're using this gateway ensure that your primary store currency is the same as the selected in Bambora.</b><br />
+                    <br />
+                    This plugin requires an account on the Bambora platform. With your account information, you first need to log in the <a href="https://www.Bambora.com/admin/sDefault.asp" target="_blank">Bambora</a><br />
+                    1. On administration > account settings > order settings, you’ll be able to add additional security settings.<br />
+                    2. On the Transaction Validation Options part, select "Require hash validation on all Payment Gateway transaction requests" option.<br />
+                    3. Pick the Hash algorithm MD5 to encrypt. Then, copy hash key.<br />
+                    4. Complete the fields Approval Redirect and Decline Redirect of Transaction Response Pages with the URL, which might be something like https://www.yourSiteName.com/Plugins/PaymentBambora/ResultHandler.<br />
+                    5. Still on administration > account settings > order settings, complete the field Payment Gateway of Response Notification with the URL, which might be something like https://www.yourSiteName.com/Plugins/PaymentBambora/ResponseNotificationHandler.
+                </p>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="MerchantId_OverrideForStore" asp-input="MerchantId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="MerchantId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="MerchantId" />
+                        <span asp-validation-for="MerchantId"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="HashKey_OverrideForStore" asp-input="HashKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="HashKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="HashKey" />
+                        <span asp-validation-for="HashKey"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="AdditionalFee" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AdditionalFee" />
+                        <span asp-validation-for="AdditionalFee"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="AdditionalFeePercentage" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AdditionalFeePercentage" />
+                        <span asp-validation-for="AdditionalFeePercentage"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.Save")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
