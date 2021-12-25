@@ -15,6 +15,7 @@ using Nop.Services.Payments;
 using System.Threading.Tasks;
 using Nop.Services.Common;
 using Nop.Services.Directory;
+using Nop.Services.Orders;
 
 namespace Nop.Plugin.Payments.Bambora
 {
@@ -30,10 +31,10 @@ namespace Nop.Plugin.Payments.Bambora
         private readonly ILocalizationService _localizationService;
         private readonly IWebHelper _webHelper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IPaymentService _paymentService;
         private readonly IAddressService _addressService;
         private readonly IStateProvinceService _stateProvinceService;
         private readonly ICountryService _countryService;
+        private readonly IOrderTotalCalculationService _orderTotalCalculationService;
 
         #endregion
 
@@ -44,20 +45,20 @@ namespace Nop.Plugin.Payments.Bambora
             ILocalizationService localizationService,
             IWebHelper webHelper,
             IHttpContextAccessor httpContextAccessor,
-            IPaymentService paymentService,
             IAddressService addressService,
             IStateProvinceService stateProvinceService,
-            ICountryService countryService)
+            ICountryService countryService, 
+            IOrderTotalCalculationService orderTotalCalculationService)
         {
             _bamboraPaymentSettings = bamboraPaymentSettings;
             _settingService = settingService;
             _localizationService = localizationService;
             _webHelper = webHelper;
             _httpContextAccessor = httpContextAccessor;
-            _paymentService = paymentService;
             _addressService = addressService;
             _stateProvinceService = stateProvinceService;
             _countryService = countryService;
+            _orderTotalCalculationService = orderTotalCalculationService;
         }
 
         #endregion
@@ -170,7 +171,7 @@ namespace Nop.Plugin.Payments.Bambora
         /// <returns>Additional handling fee</returns>
         public async Task<decimal> GetAdditionalHandlingFeeAsync(IList<ShoppingCartItem> cart)
         {
-            var result = await _paymentService.CalculateAdditionalFeeAsync(cart,
+            var result = await _orderTotalCalculationService.CalculatePaymentAdditionalFeeAsync(cart,
                 _bamboraPaymentSettings.AdditionalFee, _bamboraPaymentSettings.AdditionalFeePercentage);
             return result;
         }
